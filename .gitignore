@@ -20,7 +20,9 @@ env/
 # macOS
 .DS_Store
 
-# Plots/output (uncomment if you don't want to track generated images)
-# *.png
-# *.gif
-# *.mp4
+# Generated images (re-created by running the scripts)
+simulations/*.png
+*.png
+
+# Large course PDFs (not source notes)
+MathModeling*.pdf
