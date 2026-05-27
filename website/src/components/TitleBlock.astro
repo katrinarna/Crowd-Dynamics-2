@@ -6,73 +6,48 @@ const authors = [
 ];
 
 const repoUrl = 'https://github.com/katrinarna/Crowd-Dynamics-2';
-const siteUrl = 'https://katrinarna.github.io/Crowd-Dynamics-2/';
 const today = '27 May 2026';
-const base = import.meta.env.BASE_URL;
-const qrSrc = `${base}/qr.png`.replace(/\/+/g, '/');
 ---
 
 <header class="border-b border-[var(--color-rule)]">
   <div class="mx-auto max-w-3xl px-6 pt-14 pb-10 sm:pt-20 sm:pb-12">
-    <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-8 items-start">
-      <div>
-        <p
-          class="mb-5 text-[0.72rem] uppercase tracking-[0.22em] text-[var(--color-muted)]"
-          style="font-family: var(--font-sans);"
-        >
-          Mathematical Modeling · IE University · 2026
-        </p>
+    <p
+      class="mb-5 text-[0.72rem] uppercase tracking-[0.22em] text-[var(--color-muted)]"
+      style="font-family: var(--font-sans);"
+    >
+      Mathematical Modeling · IE University · 2026
+    </p>
 
-        <h1
-          class="text-[2.1rem] sm:text-[2.6rem] leading-[1.15] font-semibold text-[var(--color-ink)]"
-        >
-          Stress Transmission Rates, and Evacuation in Social Systems
-          <span class="whitespace-nowrap">(STRESS)</span>: Is There an Optimal Panic?
-        </h1>
+    <h1
+      class="text-[2.1rem] sm:text-[2.6rem] leading-[1.15] font-semibold text-[var(--color-ink)]"
+    >
+      Stress Transmission Rates, and Evacuation in Social Systems
+      <span class="whitespace-nowrap">(STRESS)</span>: Is There an Optimal Panic?
+    </h1>
 
-        <p class="mt-3 text-lg sm:text-xl italic text-[var(--color-ink-soft)] leading-snug">
-          Modelling stress contagion and evacuation efficiency in crowds
-        </p>
+    <p class="mt-3 text-lg sm:text-xl italic text-[var(--color-ink-soft)] leading-snug">
+      Modelling stress contagion and evacuation efficiency in crowds
+    </p>
 
-        <ul class="mt-7 flex flex-wrap gap-x-5 gap-y-1 text-[1.02rem] text-[var(--color-ink-soft)]">
-          {authors.map((a) => (
-            <li>
-              {a.name}<sup class="text-[var(--color-muted)] ml-0.5">{a.mark}</sup>
-            </li>
-          ))}
-        </ul>
-        <p
-          class="mt-2 text-[0.92rem] text-[var(--color-muted)]"
-          style="font-family: var(--font-sans);"
-        >
-          <sup>1</sup> School of Science &amp; Technology, BSc Applied Mathematics, IE University, Madrid
-        </p>
-        <p
-          class="mt-1 text-[0.84rem] text-[var(--color-muted-soft)]"
-          style="font-family: var(--font-sans);"
-        >
-          Manuscript draft · {today}
-        </p>
-      </div>
-
-      <!-- QR code -->
-      <a
-        href={qrSrc}
-        target="_blank"
-        class="block w-[112px] sm:w-[124px] shrink-0 text-center"
-        style="font-family: var(--font-sans);"
-        title="Open QR code at full size"
-      >
-        <img
-          src={qrSrc}
-          alt={`QR code linking to ${siteUrl}`}
-          class="w-full h-auto border border-[var(--color-rule)] rounded-sm bg-white p-1.5"
-        />
-        <span class="block mt-1 text-[0.7rem] tracking-[0.06em] text-[var(--color-muted)]">
-          Scan to open
-        </span>
-      </a>
-    </div>
+    <ul class="mt-7 flex flex-wrap gap-x-5 gap-y-1 text-[1.02rem] text-[var(--color-ink-soft)]">
+      {authors.map((a) => (
+        <li>
+          {a.name}<sup class="text-[var(--color-muted)] ml-0.5">{a.mark}</sup>
+        </li>
+      ))}
+    </ul>
+    <p
+      class="mt-2 text-[0.92rem] text-[var(--color-muted)]"
+      style="font-family: var(--font-sans);"
+    >
+      <sup>1</sup> School of Science &amp; Technology, BSc Applied Mathematics, IE University, Madrid
+    </p>
+    <p
+      class="mt-1 text-[0.84rem] text-[var(--color-muted-soft)]"
+      style="font-family: var(--font-sans);"
+    >
+      Manuscript draft · {today}
+    </p>
 
     <div
       class="mt-6 flex flex-wrap gap-3 text-[0.88rem]"
