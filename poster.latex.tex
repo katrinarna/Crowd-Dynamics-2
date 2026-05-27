@@ -1,0 +1,265 @@
+\documentclass[20pt]{extarticle}
+
+% =========================================================
+% PACKAGES
+% =========================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs,array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{setspace}
+\usepackage{url}
+\usepackage{caption}
+
+% =========================================================
+% TRUE A0 PORTRAIT
+% =========================================================
+\geometry{
+  paperwidth=84.1cm,
+  paperheight=118.9cm,
+  top=2.5cm,
+  bottom=2.5cm,
+  left=3.5cm,
+  right=3.5cm
+}
+
+\pagestyle{empty}
+\setstretch{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{1.8cm}
+\setlength{\parskip}{0.15cm}
+
+% =========================================================
+% COLORS
+% =========================================================
+\definecolor{BannerBlue}{RGB}{90,12,35}
+\definecolor{AccentOrange}{RGB}{244,107,2}
+\definecolor{TextColor}{RGB}{20,20,20}
+\definecolor{PlaceholderBorder}{RGB}{160,160,160}
+
+\color{TextColor}
+
+\newcommand{\posterframe}{%
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[BannerBlue]
+    (current page.south west) rectangle ([xshift=1.2cm]current page.north west);
+  \fill[BannerBlue]
+    ([xshift=-1.2cm]current page.south east) rectangle (current page.north east);
+  \fill[BannerBlue]
+    (current page.south west) rectangle ([yshift=3.5cm]current page.south east);
+\end{tikzpicture}}
+
+\graphicspath{{../Visualizations_1/}{../Visualizations_2/}}
+
+% =========================================================
+% HEADER BANNER
+% =========================================================
+\newcommand{\posterheader}{%
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[BannerBlue] (current page.north west)
+    rectangle ([yshift=-11cm]current page.north east);
+\end{tikzpicture}%
+\vspace*{-0.6cm}%
+\begin{minipage}[c]{0.14\textwidth}
+  \centering\vspace*{-1.2cm}
+  \includegraphics[height=7.2cm]{trial2.png}
+\end{minipage}%
+\begin{minipage}[c]{0.70\textwidth}
+  \centering
+  {\color{white}\bfseries\fontsize{52}{56}\selectfont
+   Stress Transmission Rates, and Evacuation in Social Systems (STRESS):
+   Is There an Optimal Panic?\par}
+  \vspace{0.3cm}
+  {\color{white}\bfseries\fontsize{32}{36}\selectfont
+   Modelling Stress Contagion and Evacuation Efficiency in Crowds\par}
+  \vspace{0.45cm}
+  {\color{white}\fontsize{28}{32}\selectfont
+   Katrín Lilja Árnadóttir \hspace{1.2cm} Ernesto Corral
+   \hspace{1.2cm} Filip Dimitrijević\par}
+  \vspace{0.15cm}
+  {\color{white}\fontsize{24}{28}\selectfont
+   IE University $|$ BSc.\ Applied Mathematics\par}
+\end{minipage}%
+\begin{minipage}[c]{0.12\textwidth}
+  \centering\vspace*{-1.2cm}
+  \includegraphics[height=6cm]{biggerielogo.png}
+\end{minipage}%
+\vspace{0.8cm}}
+
+% =========================================================
+% SECTION BAR
+% =========================================================
+\newcommand{\sectionbar}[1]{%
+  \vspace{0.15cm}\noindent
+  \colorbox{BannerBlue}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \hspace{0.35cm}{\color{white}\bfseries\LARGE #1}}}%
+  \par\vspace{0.05cm}\noindent}
+
+\newcommand{\graphbox}[2]{%
+  \begin{center}
+  \begin{tikzpicture}
+    \draw[PlaceholderBorder, dashed, line width=1.5pt]
+      (0,0) rectangle (\linewidth-0.4cm, #1);
+    \node[text=PlaceholderBorder, font=\large\itshape]
+      at (0.5\linewidth-0.2cm, 0.5*#1) {#2};
+  \end{tikzpicture}
+  \end{center}}
+
+% =========================================================
+% DOCUMENT
+% =========================================================
+\begin{document}
+\fontsize{28}{32}\selectfont
+\posterframe
+\posterheader
+
+\begin{multicols}{2}
+
+% ─────────────────────────────────────────────────────────
+\sectionbar{Motivation}
+
+Crowd emergencies claim lives not because exits are missing, but because psychology takes over. Stress propagates like a contagion: one panicked individual alarms their neighbours, who alarm theirs. More stress means faster movement, yet also more lateral pushing, less exit alignment, and a higher risk of arch formation at the bottleneck. We ask a counterintuitive question: is there an \textit{optimal} level of collective stress? Too calm and the crowd crawls; too panicked and it jams itself at the door.
+
+% ─────────────────────────────────────────────────────────
+\sectionbar{How Do You Move? The Social Force Model}
+
+We think of each person in a crowd as a particle pulled simultaneously toward the exit and pushed back by everyone around them. The Social Force Model (Helbing et al., 2000) captures this with three competing forces:
+\[
+  m_i\,\frac{d\mathbf{v}_i}{dt}
+  = \underbrace{\mathbf{f}_i^0}_{\text{where I want to go}}
+  + \underbrace{\sum_{j \neq i} \mathbf{f}_{ij}}_{\text{avoid others}}
+  + \underbrace{\sum_{W} \mathbf{f}_{iW}}_{\text{avoid walls}}
+\]
+The \textbf{self-drive} $\mathbf{f}_i^0 = \tfrac{m}{\tau}(v_0\hat{\mathbf{e}}_i - \mathbf{v}_i)$ is intent: $v_0$ is how fast you \textit{want} to walk, $\hat{\mathbf{e}}_i$ points toward the exit, and $\tau\approx0.5$\,s is your reaction time --- how long it takes to adjust your pace. \textbf{Social repulsion} $\mathbf{f}_{ij}$ is personal space: you feel uncomfortable before anyone even touches you, captured as an exponential pressure that grows with closeness (strength $A$, range $B$). When bodies \textit{do} make contact, compression stiffness $K$ resists squeezing and friction $\kappa$ resists lateral sliding, the same friction that lets three people brace a doorway against a crowd pushing from behind.
+
+% ─────────────────────────────────────────────────────────
+\sectionbar{Speed, Arches, and Exit Jams}
+
+When a crowd rushes, agents pressing from slightly different angles convert their forward push into \textit{lateral} normal force through wedge geometry. Friction then prevents any keystone from sliding. Once three agents form this configuration the arch locks, and every agent pressing from behind tightens it further. The crowd is not stopped by a wall; it is stopped by itself.
+
+\begin{center}
+  \includegraphics[height=12cm]{Screenshot 2026-05-27 at 21.10.28.png}
+  \captionof{figure}{\small Mean evac.\ time $\pm$95\,\% CI vs.\ desired speed $v_0$
+    ($N=60$, 1\,m exit, 5 seeds). The optimal band sits between orderly queueing and
+    arch-dominated jamming; large confidence interval at high $v_0$ reflects stochastic arch-escape timing.}
+  \label{fig:speedevac}
+\end{center}
+
+Figure~\ref{fig:speedevac} reveals the full picture: a U-shaped evacuation curve. Below $v_0\approx2.2$\,m/s agents queue in orderly single file, slow but smooth. Above $v_0\approx3.0$\,m/s arch formation becomes self-sustaining and evacuation time rises sharply. We call this the \textbf{Faster-Is-Slower (FIS) effect}: wanting to go faster makes you leave slower.
+
+% ─────────────────────────────────────────────────────────
+\sectionbar{How Stress Propagates}
+
+Panic spreads like a rumour: one agent sprints, neighbours speed up, and within seconds the whole crowd is running. We model each agent's panic level $\beta_i(t)\in[0,1]$:
+\[
+  \dot{\beta}_i =
+  \underbrace{-\mu\,\beta_i}_{\text{natural decay}}
+  +\underbrace{\kappa\!\sum_{j\neq i} e^{-d_{ij}/\ell}\,\varphi_j\,(1-\beta_i)}_{\text{social contagion}}
+\]
+\textbf{Parameters:} $\mu$ = recovery rate (how quickly you calm down on your own); $\kappa$ = contagion strength (how readily you catch panic from others); $\ell$ = influence range --- stress decays exponentially as $e^{-d_{ij}/\ell}$, so a neighbour at 0.5\,m matters far more than one across the room; $(1-\beta_i)$ prevents panic exceeding 1; and $\varphi_j=(1+e^{-k(|\mathbf{v}_j|-v_\mathrm{mid})})^{-1}$ is a sigmoid translating each neighbour's speed into a readable panic signal.
+
+\smallskip
+\textbf{Mean-field reduction.} For a uniform crowd at density $\rho$, the neighbour sum collapses to a single number $\Gamma=2\pi\rho\ell^2$ --- the \textit{effective neighbourhood size} --- via a disk integral:
+\[
+  \sum_{j\neq i} e^{-d_{ij}/\ell}\,\varphi_j
+  \approx \rho\beta\!\int_0^\infty\! e^{-r/\ell}2\pi r\,dr
+  = 2\pi\rho\ell^2\,\beta \equiv \Gamma\beta
+\]
+This collapses the full model to a logistic ODE with one critical threshold:
+\[
+  \boxed{R_0 = \frac{\kappa\Gamma}{\mu} = \frac{2\pi\rho\kappa\ell^2}{\mu}}
+\]
+$R_0>1$ means each panicking agent re-stresses more than one other before calming: panic sustains itself at $\beta^*=1-1/R_0$; below $R_0=1$ it dies out. Because $\Gamma\propto\rho\propto N$, larger or denser crowds are more susceptible --- managers lower $R_0$ by widening exits ($\downarrow\rho$), authoritative audio ($\downarrow\kappa$), or calming signals ($\uparrow\mu$). Simulations confirm the mean-field curve (Figure~\ref{fig:phase}).
+
+\begin{center}
+  \includegraphics[height=15cm]{fig2_phase_diagram.png}
+  \captionof{figure}{\small Endemic stress $\beta^*$ vs.\ $R_0$. Theory (dashed,
+    $\beta^*=1-1/R_0$) and spatial simulations (dots) match closely; the sharp
+    bifurcation at $R_0=1$ is a transcritical phase transition.}
+  \label{fig:phase}
+\end{center}
+
+% ─────────────────────────────────────────────────────────
+% COLUMN BREAK after phase diagram — same as working version
+% ─────────────────────────────────────────────────────────
+\columnbreak
+
+% =========================================================
+% COLUMN 2
+% =========================================================
+
+% ─────────────────────────────────────────────────────────
+\sectionbar{How Emotion Becomes Motion}
+
+Stress and motion are inextricably linked in the model. A panicked agent walks faster, and we model this linearly,
+\[
+  v_0(\beta_i) = V_{\min} + (V_{\max}-V_{\min})\,\beta_i,
+  \quad V_{\min}=1.0\ \text{m/s},\quad V_{\max}=5.0\ \text{m/s}
+\]
+so panic directly raises desired speed, placing each agent in the orderly or jammed SFM regime. 
+
+\begin{center}
+  \includegraphics[height=15cm]{Screenshot 2026-05-27 at 20.29.07.png}
+  \captionof{figure}{\small Mean evac.\ time vs.\ initial stress $\Sigma_0$ ($N=55$,
+    18 seeds). Optimal at $\Sigma_0^*\approx0.47$ ($v_0\approx3.8$\,m/s); the
+    shaded zone marks the arch-dominated clogging regime.}
+  \label{fig:timevsstress}
+\end{center}
+
+Figure~\ref{fig:timevsstress} reveals a second U-curve, now as a function of collective initial stress $\Sigma_0$. The mechanism mirrors
+   the speed result: stress drives faster movement, which increases lateral pressure and arch formation risk. At low $\Sigma_0$,
+  agents move too cautiously and evacuation time rises; at high $\Sigma_0$, the excess speed triggers clogging at the exit,       
+  sharply degrading throughput. The optimal stress level $\Sigma_0^*$ sits at the balance between these two regimes and emerges
+  robustly across varying seeds, room sizes, and exit widths. 
+
+The epidemic threshold makes the right branch even steeper. Below $R_0=1$ stress decays during the evacuation and herding stays moderate. Above $R_0=1$ the crowd locks into sustained panic $\beta^*=1-1/R_0$ regardless of how it started, herding surges discontinuously. This is why evacuation times jump sharply to the right of the optimum: it is a phase transition.
+
+
+% ─────────────────────────────────────────────────────────
+\sectionbar{Agents vs.\ Optimal Stress $\Sigma_0^*(N)$}
+
+\graphbox{9cm}{FIGURE [TO ADD]: Optimal stress $\Sigma_0^*(N)$ vs.\ crowd size $N$}
+
+The optimal stress \textit{decreases} monotonically with crowd size. Larger $N$ raises mean density $\rho\approx N/A$, which raises $\Gamma=2\pi\rho\ell^2$, which raises $R_0$. The epidemic threshold is crossed when $N>N^*=\mu A/(2\pi\kappa\ell^2)$: for $N>N^*$, sustained panic is guaranteed above a threshold stress that decreases with $N$, shifting the optimal $\Sigma_0^*$ leftward. Near the bottleneck, local density can be three to four times the room average, pushing $R_0$ above 1 even when the crowd appears sparse globally.
+
+This result has direct design implications. Crowd managers can raise $N^*$ and widen the safe operating window by: (i) reducing density $\rho$ via wider exits or staggered entry, shifting $R_0$ below 1; (ii) reducing contagion strength $\kappa$ via authoritative audio instructions that give agents an alternative information channel, reducing susceptibility to neighbour-driven panic; (iii) reducing contagion length $\ell$ via physical separators that block line-of-sight, shortening the range of social influence. Each lever corresponds to a measurable architectural or procedural intervention. The broader takeaway: the alarm intensity and crowd density appropriate for a 20-person fire drill are dangerously mismatched for a 500-person concert venue.
+
+% ─────────────────────────────────────────────────────────
+\sectionbar{References}
+{\fontsize{17}{20}\selectfont\setlength{\parskip}{0.08cm}
+[1] Helbing, D., Farkas, I., \& Vicsek, T. (2000). Simulating dynamical features of escape panic. \textit{Nature}, 407, 487--490.
+
+[2] Helbing, D., \& Moln\'{a}r, P. (1995). Social force model for pedestrian dynamics. \textit{Phys.\ Rev.\ E}, 51(5), 4282.
+
+[3] Mouss\"{a}\"{\i}d, M., et al.\ (2011). How simple rules determine pedestrian behavior and crowd disasters. \textit{PNAS}, 108(17), 6884--6888.
+
+[4] Fu, L., et al.\ (2014). Simulation of emotional contagion using modified SIR model. \textit{Physica A}, 405, 380--391.
+
+[5] Hill, A.\ L., et al.\ (2010). Emotions as infectious diseases in a large social network: The SISa model. \textit{Proc.\ R.\ Soc.\ B}, 277, 3827--3835.
+
+[6] Iacopini, I., et al.\ (2019). Simplicial models of social contagion. \textit{Nat.\ Commun.}, 10, 2485.
+
+[7] Cantin, G., et al.\ (2016). Mathematical modeling of human behaviors during catastrophic events. \textit{Int.\ J.\ Bifurcation Chaos}, 26(10), 1630025.
+
+[8] Panagiotopoulos, I., et al.\ (2022). Control of collective human behavior. \textit{Phys.\ Rev.\ Research}, 4(4), 043190.
+\par}
+
+\vspace{0.3cm}
+\begin{flushright}
+\begin{tikzpicture}
+  \draw[BannerBlue, line width=2pt] (0,0) rectangle (5.5cm,5.5cm);
+  \node[text=BannerBlue, font=\normalsize\itshape, align=center]
+    at (2.75cm,2.75cm) {QR Code};
+\end{tikzpicture}
+\end{flushright}
+
+\end{multicols}
+\end{document}
