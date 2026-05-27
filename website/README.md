@@ -1,43 +1,42 @@
-# Astro Starter Kit: Minimal
+# STRESS — website
+
+Static site (Astro + Tailwind + KaTeX) for the STRESS mathematical modeling project.
+
+Live: <https://katrinarna.github.io/Crowd-Dynamics-2/>
+
+## Local development
 
 ```sh
-npm create astro@latest -- --template minimal
+cd website
+npm install
+npm run dev    # http://localhost:4321/Crowd-Dynamics-2/
+npm run build  # outputs dist/
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Deployment
 
-## 🚀 Project Structure
+Auto-deploys to GitHub Pages via `.github/workflows/deploy.yml` on every push to
+`main` that touches `website/**`.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Layout
 
-```text
-/
-├── public/
+```
+website/
+├── public/            # static assets (figures, QR code, favicon)
+│   ├── figures/       # poster figures
+│   └── qr.png         # QR code linking to the deployed URL
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/    # title block, simulator, math, TOC
+│   ├── layouts/       # base HTML wrapper
+│   ├── sections/      # one .astro per paper section
+│   ├── styles/        # global.css with theme variables
+│   └── pages/index.astro
+├── render/            # python scripts that produce poster PNGs
+└── astro.config.mjs
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Updating the figures
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Drop new PNGs into `public/figures/` with the existing filenames
+(`evac_time_plot.png`, `fig2_phase_diagram.png`, `evac_time_vs_sigma.png`) and
+push. The workflow republishes automatically.
