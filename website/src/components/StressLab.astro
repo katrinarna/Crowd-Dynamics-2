@@ -1,0 +1,301 @@
+---
+// Interactive SFM + stress contagion simulator.
+// Direct port of Filip's sfm_smooth.py + stress_final_evac.py.
+---
+
+<section id="interactive" class="border-b border-[var(--color-rule)] bg-[var(--color-figure-bg)]">
+  <div class="mx-auto max-w-5xl px-6 py-10 sm:py-12">
+    <p
+      class="section-num mb-1 text-[0.72rem] uppercase text-[var(--color-muted)]"
+      style="font-family: var(--font-sans);"
+    >
+      Interactive
+    </p>
+    <h2 class="section-heading text-[1.7rem] sm:text-[2rem] leading-[1.2]">
+      Try it: design an evacuation
+    </h2>
+    <p
+      class="paper-prose"
+      style="font-size: 1rem; color: var(--color-ink-soft); margin-bottom: 1.25rem;"
+    >
+      The simulator below runs the model on this page in your browser.
+      Move the sliders to change the collective stress, the door width,
+      and the crowd size, then press <strong>Run</strong>. Agents are
+      coloured by their stress level β (green calm, amber moderate, red
+      panicked). At low σ the crowd queues in single file. Push σ above
+      about 0.5 with a narrow door and the bottleneck begins to lock.
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 items-start">
+      <!-- Canvas + status bar -->
+      <div class="rounded-md border border-[var(--color-rule)] bg-[#1a1a2e] overflow-hidden shadow-sm">
+        <div
+          class="flex flex-wrap items-center justify-between gap-3 border-b border-[#2a2a3a] px-4 py-2 text-[0.85rem] text-white"
+          style="font-family: var(--font-sans);"
+        >
+          <div class="flex items-center gap-4">
+            <span><span class="text-[#9aa6c6]">t =</span> <span id="sim-time" class="tabular-nums">0.0 s</span></span>
+            <span><span class="text-[#9aa6c6]">in:</span> <span id="sim-remaining" class="tabular-nums">0/0</span></span>
+            <span><span class="text-[#9aa6c6]">out:</span> <span id="sim-out" class="tabular-nums">0</span></span>
+            <span><span class="text-[#9aa6c6]">β̄:</span> <span id="sim-meanbeta" class="tabular-nums">0.00</span></span>
+          </div>
+          <div id="sim-status" class="text-[#9aa6c6]">paused</div>
+        </div>
+        <canvas
+          id="sim-canvas"
+          width="800"
+          height="640"
+          class="block w-full h-auto"
+          style="image-rendering: auto;"
+        ></canvas>
+        <div
+          id="sim-regime"
+          class="px-4 py-2 text-[0.85rem] text-center border-t border-[#2a2a3a]"
+          style="font-family: var(--font-sans);"
+        ></div>
+      </div>
+
+      <!-- Controls -->
+      <div
+        class="rounded-md border border-[var(--color-rule)] bg-white p-4 space-y-4 text-[0.92rem]"
+        style="font-family: var(--font-sans); color: var(--color-ink-soft);"
+      >
+        <div class="flex gap-2">
+          <button
+            id="sim-run"
+            class="flex-1 rounded-sm border border-[var(--color-link)] bg-[var(--color-link)] px-3 py-1.5 text-white text-sm font-medium hover:bg-[var(--color-link-hover)] hover:border-[var(--color-link-hover)] transition"
+          >
+            ▶ Run
+          </button>
+          <button
+            id="sim-reset"
+            class="flex-1 rounded-sm border border-[var(--color-rule)] bg-white px-3 py-1.5 text-[var(--color-ink-soft)] text-sm font-medium hover:border-[var(--color-link)] hover:text-[var(--color-link)] transition"
+          >
+            ↺ Restart
+          </button>
+        </div>
+
+        <!-- Collective stress σ -->
+        <label class="block">
+          <div class="flex justify-between mb-1">
+            <span>Collective stress&nbsp;<em>σ</em></span>
+            <span id="sim-S-val" class="tabular-nums text-[var(--color-ink)]">0.20</span>
+          </div>
+          <input id="sim-S" type="range" min="0" max="1" step="0.02" value="0.2" class="w-full accent-[var(--color-link)]" />
+          <div class="text-[0.72rem] text-[var(--color-muted)] leading-snug mt-1">
+            <span id="sim-V-readout">v₀ = 1.04 m/s</span>
+          </div>
+        </label>
+
+        <!-- Door width -->
+        <label class="block">
+          <div class="flex justify-between mb-1">
+            <span>Door width</span>
+            <span id="sim-W-val" class="tabular-nums text-[var(--color-ink)]">1.0 m</span>
+          </div>
+          <input id="sim-W" type="range" min="0.5" max="3.0" step="0.1" value="1.0" class="w-full accent-[var(--color-link)]" />
+        </label>
+
+        <!-- N agents -->
+        <label class="block">
+          <div class="flex justify-between mb-1">
+            <span>Number of agents&nbsp;<em>N</em></span>
+            <span id="sim-N-val" class="tabular-nums text-[var(--color-ink)]">60</span>
+          </div>
+          <input id="sim-N" type="range" min="10" max="120" step="5" value="60" class="w-full accent-[var(--color-link)]" />
+        </label>
+
+        <div class="pt-2 text-[0.8rem] text-[var(--color-muted)] leading-relaxed">
+          <strong class="text-[var(--color-ink-soft)]">Tip:</strong>
+          σ maps linearly to desired speed
+          <em>v</em><sub>0</sub> = 0.3 + σ · 3.7 m/s. Below
+          σ ≈ 0.45 agents do not enter body contact and the queue stays
+          orderly. Above that, the bottleneck arches.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { StressSim, ROOM_W, ROOM_H, stressColor, stressToV0, B_eff, d_eq } from './sim/StressSim.ts';
+  import type { SimParams } from './sim/StressSim.ts';
+
+  const canvas = document.getElementById('sim-canvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
+
+  const PAD = 30;
+  function viewport() {
+    const cw = canvas.width, ch = canvas.height;
+    const sx = (cw - 2 * PAD) / ROOM_W;
+    const sy = (ch - 2 * PAD) / ROOM_H;
+    const s = Math.min(sx, sy);
+    const ox = (cw - s * ROOM_W) / 2;
+    const oy = (ch - s * ROOM_H) / 2;
+    return { s, ox, oy };
+  }
+  function w2cX(x: number) { const { s, ox } = viewport(); return ox + x * s; }
+  function w2cY(y: number) { const { s, oy } = viewport(); return oy + y * s; }
+  function w2cR(r: number) { return r * viewport().s; }
+
+  function drawRoom(sim: StressSim) {
+    const cw = canvas.width, ch = canvas.height;
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.fillStyle = '#0f3460';
+    ctx.fillRect(w2cX(0), w2cY(0), w2cR(ROOM_W), w2cR(ROOM_H));
+
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(w2cX(0), w2cY(0)); ctx.lineTo(w2cX(ROOM_W), w2cY(0));
+    ctx.moveTo(w2cX(0), w2cY(ROOM_H)); ctx.lineTo(w2cX(ROOM_W), w2cY(ROOM_H));
+    ctx.moveTo(w2cX(0), w2cY(0)); ctx.lineTo(w2cX(0), w2cY(ROOM_H));
+    ctx.moveTo(w2cX(ROOM_W), w2cY(0)); ctx.lineTo(w2cX(ROOM_W), w2cY(sim.eyLo));
+    ctx.moveTo(w2cX(ROOM_W), w2cY(sim.eyHi)); ctx.lineTo(w2cX(ROOM_W), w2cY(ROOM_H));
+    ctx.stroke();
+
+    // Exit gap highlight
+    ctx.fillStyle = 'rgba(0,255,136,0.20)';
+    ctx.fillRect(
+      w2cX(ROOM_W) - 4,
+      w2cY(sim.eyLo),
+      w2cR(0.4),
+      w2cR(sim.eyHi - sim.eyLo),
+    );
+
+    // Exit arrow + label
+    ctx.strokeStyle = '#00ff88';
+    ctx.fillStyle = '#00ff88';
+    ctx.lineWidth = 1.8;
+    const yc = (sim.eyLo + sim.eyHi) / 2;
+    const ax = w2cX(ROOM_W) + 6;
+    const bx = w2cX(ROOM_W) + 22;
+    ctx.beginPath();
+    ctx.moveTo(ax, w2cY(yc)); ctx.lineTo(bx, w2cY(yc));
+    ctx.moveTo(bx, w2cY(yc)); ctx.lineTo(bx - 4, w2cY(yc) - 4);
+    ctx.moveTo(bx, w2cY(yc)); ctx.lineTo(bx - 4, w2cY(yc) + 4);
+    ctx.stroke();
+    ctx.font = `${Math.max(11, Math.round(w2cR(0.32)))}px "Inter", sans-serif`;
+    ctx.fillText('EXIT', bx + 4, w2cY(yc) + 4);
+  }
+
+  function drawAgents(sim: StressSim) {
+    const { N, pos, beta, radii, exited } = sim;
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < N; i++) {
+      if (exited[i]) continue;
+      const cx = w2cX(pos[2 * i]);
+      const cy = w2cY(pos[2 * i + 1]);
+      const r = w2cR(radii[i]);
+      ctx.fillStyle = stressColor(beta[i]);
+      ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+  }
+
+  // ── UI wiring ──
+  const initial: SimParams = { N: 60, exitWidth: 1.0, sigma: 0.20 };
+  const sim = new StressSim(initial);
+
+  const $ = (id: string) => document.getElementById(id)!;
+  const tEl = $('sim-time'), remEl = $('sim-remaining'), outEl = $('sim-out');
+  const mbEl = $('sim-meanbeta'), stEl = $('sim-status');
+  const regEl = $('sim-regime');
+  const vReadout = $('sim-V-readout');
+  const sIn = $('sim-S') as HTMLInputElement;
+  const wIn = $('sim-W') as HTMLInputElement;
+  const nIn = $('sim-N') as HTMLInputElement;
+  const sVal = $('sim-S-val'), wVal = $('sim-W-val'), nVal = $('sim-N-val');
+  const runBtn = $('sim-run') as HTMLButtonElement;
+  const resetBtn = $('sim-reset') as HTMLButtonElement;
+
+  let running = false;
+  const stepsPerFrame = 4;
+
+  function regimeFromSigma(sigma: number): { label: string; color: string } {
+    const v0 = stressToV0(sigma);
+    const de = d_eq(v0);
+    if (de >= 0.60) return { label: 'LOW STRESS · orderly queue', color: '#22dd88' };
+    if (de >= 0.35) return { label: 'MODERATE STRESS · occasional contact', color: '#ffcc44' };
+    return { label: 'HIGH STRESS · arch jams at exit', color: '#ff4466' };
+  }
+
+  function setRunning(on: boolean) {
+    running = on;
+    runBtn.textContent = on ? '⏸ Pause' : '▶ Run';
+    if (sim.done) {
+      stEl.textContent = `evacuated in ${sim.time.toFixed(1)} s`;
+      stEl.style.color = '#9affc4';
+    } else {
+      stEl.textContent = on ? 'running' : 'paused';
+      stEl.style.color = '#9aa6c6';
+    }
+  }
+
+  function applyAndReset() {
+    sim.setParams({
+      N: parseInt(nIn.value, 10),
+      exitWidth: parseFloat(wIn.value),
+      sigma: parseFloat(sIn.value),
+    });
+    sim.reset();
+    setRunning(false);
+    render();
+  }
+
+  function updateLabels() {
+    const sigma = parseFloat(sIn.value);
+    sVal.textContent = sigma.toFixed(2);
+    wVal.textContent = parseFloat(wIn.value).toFixed(1) + ' m';
+    nVal.textContent = nIn.value;
+    const v0 = stressToV0(sigma);
+    vReadout.textContent = `v₀ = ${v0.toFixed(2)} m/s · B_eff = ${B_eff(v0).toFixed(3)} m · d_eq = ${d_eq(v0) > 5 ? '∞' : d_eq(v0).toFixed(2) + ' m'}`;
+    const r = regimeFromSigma(sigma);
+    regEl.textContent = r.label;
+    regEl.style.color = r.color;
+  }
+
+  function render() {
+    drawRoom(sim);
+    drawAgents(sim);
+    tEl.textContent = sim.time.toFixed(1) + ' s';
+    remEl.textContent = `${sim.remaining}/${sim.N}`;
+    outEl.textContent = sim.nOut.toString();
+    mbEl.textContent = sim.meanBeta.toFixed(2);
+  }
+
+  function frame() {
+    if (running) {
+      for (let k = 0; k < stepsPerFrame; k++) {
+        sim.step();
+        if (sim.done) { setRunning(false); break; }
+      }
+    }
+    render();
+    requestAnimationFrame(frame);
+  }
+
+  // Bind: σ slider only adjusts the live model; door/N reset
+  sIn.addEventListener('input', () => {
+    updateLabels();
+    sim.setParams({ sigma: parseFloat(sIn.value) });
+  });
+  wIn.addEventListener('input', () => updateLabels());
+  wIn.addEventListener('change', () => applyAndReset());
+  nIn.addEventListener('input', () => updateLabels());
+  nIn.addEventListener('change', () => applyAndReset());
+
+  runBtn.addEventListener('click', () => {
+    if (sim.done) applyAndReset();
+    setRunning(!running);
+  });
+  resetBtn.addEventListener('click', () => applyAndReset());
+
+  updateLabels();
+  applyAndReset();
+  requestAnimationFrame(frame);
+</script>

@@ -1,0 +1,61 @@
+---
+import Section from '../components/Section.astro';
+import Math from '../components/Math.astro';
+---
+
+<Section id="motivation" number="1" title="Motivation">
+  <p>
+    Pedestrian crowds under evacuation behave more like a coupled
+    physical–psychological system than like a fluid through an orifice.
+    Building codes and most agent-based models implicitly assume the
+    latter, sizing exits to occupancy as if throughput were a function of
+    geometry alone. The faster-is-slower (FIS) effect, first quantified
+    by Helbing, Farkas and Vicsek (2000) [1], already shows the gap.
+    Raising every agent's desired walking speed lowers the throughput of
+    a narrow exit, because lateral contact forces lock pedestrians into
+    self-supporting arches at the bottleneck. FIS is a property of the
+    geometry and the contact physics alone. But it points at something
+    larger: the desired speed is not a control parameter so much as an
+    output of the agent's emotional state, and that state is contagious.
+  </p>
+
+  <p>
+    The mechanism is well documented. In a crowd under threat, a single
+    panicked individual visibly accelerates. Neighbours read the motion
+    as a signal that the situation has changed, raise their own urgency,
+    and pass the signal on. Within seconds, what began as one
+    perturbation has crossed the room. The Social Force Model
+    (Helbing and Molnár, 1995) [2] treats only the physical layer of
+    this process: positions, velocities, social repulsion, contact
+    friction. It is silent on the spread of the stress that drives
+    desired speed in the first place. Bellomo and collaborators (2016)
+    [7] identified this as the central modelling gap and proposed
+    treating stress as a per-agent internal state that evolves under
+    social interaction.
+  </p>
+
+  <p>
+    The present work follows that suggestion. We assign every agent a
+    stress level <Math tex={String.raw`\beta_i(t) \in [0, 1]`} /> and
+    couple two ingredients. First, an SIR-style contagion equation on
+    the <Math tex={String.raw`\beta_i`} /> drawn from emotional-contagion
+    models (Fu et al., 2014; Hill et al., 2010) [4, 5]. Second, a linear
+    link from stress to desired speed that feeds back into the Social
+    Force Model. The coupled system contains two competing effects.
+    Higher stress raises desired speed, which in the orderly regime
+    shortens evacuation time. Higher stress also raises lateral pressure
+    at the bottleneck, which in the panicked regime triggers arch
+    formation and lengthens it. The question that follows is the central
+    one of this paper: is there an <em>optimal</em> level of collective
+    stress, and how does it depend on the size of the crowd?
+  </p>
+
+  <p>
+    The question admits a partial closed-form answer through a mean-field
+    reduction of the contagion ODE, and a quantitative one through
+    agent-based simulation. The answer translates into three measurable
+    architectural levers: exit width, alarm authority, and visual
+    line-of-sight. Each corresponds to one of the three model parameters
+    that set the epidemic threshold.
+  </p>
+</Section>

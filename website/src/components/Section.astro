@@ -1,0 +1,29 @@
+---
+interface Props {
+  id: string;
+  number?: string;
+  title: string;
+  wide?: boolean;
+}
+
+const { id, number, title, wide = false } = Astro.props;
+const maxW = wide ? 'max-w-5xl' : 'max-w-3xl';
+---
+
+<section id={id} class="border-b border-[var(--color-rule-soft)] last:border-none">
+  <div class={`mx-auto ${maxW} px-6 py-12 sm:py-14`}>
+    {number && (
+      <p class="section-num mb-1 text-[0.72rem] uppercase text-[var(--color-muted)]">
+        Section {number}
+      </p>
+    )}
+    <h2
+      class="section-heading text-[1.7rem] sm:text-[2rem] leading-[1.2]"
+    >
+      {title}
+    </h2>
+    <div class="paper-prose">
+      <slot />
+    </div>
+  </div>
+</section>

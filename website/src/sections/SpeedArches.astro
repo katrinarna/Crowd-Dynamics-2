@@ -1,0 +1,64 @@
+---
+import Section from '../components/Section.astro';
+import Math from '../components/Math.astro';
+---
+
+<Section id="speed-arches" number="3" title="Speed, arches, and exit jams">
+  <p>
+    When a crowd rushes, agents pressing from slightly different angles
+    convert their forward push into <em>lateral</em> normal force through
+    wedge geometry. Friction then prevents any keystone from sliding. Once
+    three agents form this configuration the arch locks, and every agent
+    pressing from behind tightens it further. The crowd is not stopped by
+    a wall; it is stopped by itself.
+  </p>
+
+  <figure>
+    <img src={`${import.meta.env.BASE_URL}/figures/evac_time_plot.png`.replace(/\/+/g, '/')} alt="Mean evacuation time vs desired speed, with 95% confidence intervals" />
+    <figcaption>
+      <strong>Figure 1.</strong> Mean evacuation time
+      <Math tex={String.raw`\pm`} /> 95 % CI vs. desired speed <Math tex={String.raw`v_0`} />
+      (<Math tex={String.raw`N = 60`} />, 1 m exit, 5 seeds). The optimal
+      band sits between orderly queueing and arch-dominated jamming; the
+      large confidence interval at high <Math tex={String.raw`v_0`} />
+      reflects stochastic arch-escape timing.
+    </figcaption>
+  </figure>
+
+  <p>
+    Figure&nbsp;1 reveals the full picture: a U-shaped evacuation curve.
+    Below <Math tex={String.raw`v_0 \approx 2.2\,\text{m/s}`} /> agents
+    queue in orderly single file, slow but smooth. Above
+    <Math tex={String.raw`v_0 \approx 3.0\,\text{m/s}`} /> arch formation
+    becomes self-sustaining and evacuation time rises sharply. We call
+    this the <strong>faster-is-slower (FIS) effect</strong>: wanting to go
+    faster makes you leave slower.
+  </p>
+
+  <p>
+    The mechanism is worth stating precisely because the rest of the
+    paper depends on it. Two agents arriving at the doorway from
+    slightly different angles convert part of their forward push into a
+    lateral force along their contact line. If the sliding friction
+    <Math tex={String.raw`\kappa`} /> is large enough to balance that
+    lateral force, neither agent slides past the other. A third agent
+    pressing from behind closes the configuration into a small
+    self-supporting arch. The wall is not holding the crowd back; the
+    crowd is holding itself. The optimal
+    <Math tex={String.raw`v_0`} /> in Figure&nbsp;1 is the value at
+    which the marginal benefit of moving faster (shorter time per
+    crossing) and the marginal cost (higher probability of an arch)
+    balance.
+  </p>
+
+  <p>
+    The faster-is-slower effect is therefore purely mechanical: it does
+    not require panic, contagion, or any model of the crowd's emotional
+    state. But it does require something to raise
+    <Math tex={String.raw`v_0`} /> in the first place, and that
+    something, in a real evacuation, is panic. The next section
+    introduces a model for how panic spreads, and the one after that
+    closes the loop by linking the spread back to
+    <Math tex={String.raw`v_0`} />.
+  </p>
+</Section>

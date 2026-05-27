@@ -1,0 +1,36 @@
+---
+import Section from '../components/Section.astro';
+import Math from '../components/Math.astro';
+---
+
+<Section id="sfm" number="2" title="How do you move? The Social Force Model">
+  <p>
+    We think of each person in a crowd as a particle pulled simultaneously
+    toward the exit and pushed back by everyone around them. The Social
+    Force Model (Helbing et al., 2000) captures this with three competing
+    forces:
+  </p>
+
+  <Math
+    display
+    tex={String.raw`m_i\,\frac{d\mathbf{v}_i}{dt} \;=\; \underbrace{\mathbf{f}_i^{0}}_{\text{where I want to go}} \;+\; \sum_{j \neq i} \underbrace{\mathbf{f}_{ij}}_{\text{avoid others}} \;+\; \sum_{W} \underbrace{\mathbf{f}_{iW}}_{\text{avoid walls}}.`}
+  />
+
+  <p>
+    The <strong>self-drive</strong>
+    <Math tex={String.raw`\mathbf{f}_i^{0} = \tfrac{m}{\tau}(v_0\hat{\mathbf{e}}_i - \mathbf{v}_i)`} />
+    is intent: <Math tex={String.raw`v_0`} /> is how fast you <em>want</em> to walk,
+    <Math tex={String.raw`\hat{\mathbf{e}}_i`} /> points toward the exit, and
+    <Math tex={String.raw`\tau \approx 0.5\,\text{s}`} /> is your reaction
+    time, how long it takes to adjust your pace.
+    <strong>Social repulsion</strong>
+    <Math tex={String.raw`\mathbf{f}_{ij}`} /> is personal space: you feel
+    uncomfortable before anyone even touches you, captured as an
+    exponential pressure that grows with closeness (strength
+    <Math tex={String.raw`A`} />, range <Math tex={String.raw`B`} />). When bodies <em>do</em> make
+    contact, compression stiffness <Math tex={String.raw`K`} /> resists squeezing and
+    friction <Math tex={String.raw`\kappa`} /> resists lateral sliding. This is the
+    same friction that lets three people brace a doorway against a crowd
+    pushing from behind.
+  </p>
+</Section>

@@ -1,0 +1,98 @@
+---
+const authors = [
+  { name: 'Katrín Lilja Árnadóttir', mark: '1' },
+  { name: 'Ernesto Corral', mark: '1' },
+  { name: 'Filip Dimitrijević', mark: '1' },
+];
+
+const repoUrl = 'https://github.com/katrinarna/Crowd-Dynamics-2';
+const siteUrl = 'https://katrinarna.github.io/Crowd-Dynamics-2/';
+const today = '27 May 2026';
+const base = import.meta.env.BASE_URL;
+const qrSrc = `${base}/qr.png`.replace(/\/+/g, '/');
+---
+
+<header class="border-b border-[var(--color-rule)]">
+  <div class="mx-auto max-w-3xl px-6 pt-14 pb-10 sm:pt-20 sm:pb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-8 items-start">
+      <div>
+        <p
+          class="mb-5 text-[0.72rem] uppercase tracking-[0.22em] text-[var(--color-muted)]"
+          style="font-family: var(--font-sans);"
+        >
+          Mathematical Modeling · IE University · 2026
+        </p>
+
+        <h1
+          class="text-[2.1rem] sm:text-[2.6rem] leading-[1.15] font-semibold text-[var(--color-ink)]"
+        >
+          Stress Transmission Rates, and Evacuation in Social Systems
+          <span class="whitespace-nowrap">(STRESS)</span>: Is There an Optimal Panic?
+        </h1>
+
+        <p class="mt-3 text-lg sm:text-xl italic text-[var(--color-ink-soft)] leading-snug">
+          Modelling stress contagion and evacuation efficiency in crowds
+        </p>
+
+        <ul class="mt-7 flex flex-wrap gap-x-5 gap-y-1 text-[1.02rem] text-[var(--color-ink-soft)]">
+          {authors.map((a) => (
+            <li>
+              {a.name}<sup class="text-[var(--color-muted)] ml-0.5">{a.mark}</sup>
+            </li>
+          ))}
+        </ul>
+        <p
+          class="mt-2 text-[0.92rem] text-[var(--color-muted)]"
+          style="font-family: var(--font-sans);"
+        >
+          <sup>1</sup> School of Science &amp; Technology, BSc Applied Mathematics, IE University, Madrid
+        </p>
+        <p
+          class="mt-1 text-[0.84rem] text-[var(--color-muted-soft)]"
+          style="font-family: var(--font-sans);"
+        >
+          Manuscript draft · {today}
+        </p>
+      </div>
+
+      <!-- QR code -->
+      <a
+        href={qrSrc}
+        target="_blank"
+        class="block w-[112px] sm:w-[124px] shrink-0 text-center"
+        style="font-family: var(--font-sans);"
+        title="Open QR code at full size"
+      >
+        <img
+          src={qrSrc}
+          alt={`QR code linking to ${siteUrl}`}
+          class="w-full h-auto border border-[var(--color-rule)] rounded-sm bg-white p-1.5"
+        />
+        <span class="block mt-1 text-[0.7rem] tracking-[0.06em] text-[var(--color-muted)]">
+          Scan to open
+        </span>
+      </a>
+    </div>
+
+    <div
+      class="mt-6 flex flex-wrap gap-3 text-[0.88rem]"
+      style="font-family: var(--font-sans);"
+    >
+      <a
+        href={repoUrl}
+        class="inline-flex items-center gap-1.5 text-[var(--color-link)] hover:text-[var(--color-link-hover)] underline underline-offset-2"
+      >
+        <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+          <path
+            d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.92.58.1.79-.25.79-.56v-2.02c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.69-1.29-1.69-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.6.23 2.78.11 3.07.74.81 1.19 1.84 1.19 3.1 0 4.44-2.7 5.41-5.26 5.69.42.36.79 1.07.79 2.17v3.22c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"
+          ></path>
+        </svg>
+        Source code
+      </a>
+      <span class="text-[var(--color-muted-soft)]">·</span>
+      <a href="#interactive" class="text-[var(--color-link)] hover:text-[var(--color-link-hover)] underline underline-offset-2">Try the simulator</a>
+      <span class="text-[var(--color-muted-soft)]">·</span>
+      <a href="#abstract" class="text-[var(--color-link)] hover:text-[var(--color-link-hover)] underline underline-offset-2">Read the abstract</a>
+    </div>
+  </div>
+</header>

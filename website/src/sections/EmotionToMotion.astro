@@ -1,0 +1,57 @@
+---
+import Section from '../components/Section.astro';
+import Math from '../components/Math.astro';
+---
+
+<Section id="emotion-motion" number="5" title="How emotion becomes motion">
+  <p>
+    Stress and motion are inextricably linked in the model. A panicked
+    agent walks faster, and we model this linearly,
+  </p>
+
+  <Math
+    display
+    tex={String.raw`v_0(\beta_i) \;=\; V_{\min} + (V_{\max} - V_{\min})\,\beta_i, \quad V_{\min} = 1.0\,\text{m/s},\quad V_{\max} = 5.0\,\text{m/s},`}
+  />
+
+  <p>
+    so panic directly raises desired speed, placing each agent in the
+    orderly or jammed SFM regime.
+  </p>
+
+  <figure>
+    <img src={`${import.meta.env.BASE_URL}/figures/evac_time_vs_sigma.png`.replace(/\/+/g, '/')} alt="Mean evacuation time vs initial collective stress β" />
+    <figcaption>
+      <strong>Figure 3.</strong> Mean evacuation time vs. initial stress
+      <Math tex={String.raw`\Sigma_0`} /> (<Math tex={String.raw`N = 60`} />,
+      5 seeds). The optimum sits at
+      <Math tex={String.raw`\Sigma_0^{*}`} /> marked with the filled
+      circle, corresponding to a desired walking speed at the lower edge
+      of the arch-jamming regime. The shaded zone marks the
+      arch-dominated clogging regime where evacuation time rises sharply.
+    </figcaption>
+  </figure>
+
+  <p>
+    Figure&nbsp;3 reveals a second U-curve, now as a function of
+    collective stress <Math tex={String.raw`\Sigma_0`} />. The mechanism mirrors the
+    speed result: stress drives faster movement, which increases lateral
+    pressure and arch formation risk. At low <Math tex={String.raw`\Sigma_0`} />,
+    agents move too cautiously and evacuation time rises; at high
+    <Math tex={String.raw`\Sigma_0`} />, the excess speed triggers clogging at the
+    exit, sharply degrading throughput. The optimal stress level
+    <Math tex={String.raw`\Sigma_0^{*}`} /> sits at the balance between
+    these two regimes and emerges robustly across varying seeds, room
+    sizes, and exit widths.
+  </p>
+
+  <p>
+    The epidemic threshold makes the right branch even steeper. Below
+    <Math tex={String.raw`R_0 = 1`} /> stress decays during the evacuation and herding
+    stays moderate. Above <Math tex={String.raw`R_0 = 1`} /> the crowd locks into
+    sustained panic <Math tex={String.raw`\beta^{*} = 1 - 1/R_0`} /> regardless of
+    how it started, and herding surges discontinuously. This is why
+    evacuation times jump sharply to the right of the optimum: it is a
+    phase transition.
+  </p>
+</Section>

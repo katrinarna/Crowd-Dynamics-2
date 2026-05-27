@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TitleBlock from '../components/TitleBlock.astro';
+import SidebarTOC from '../components/SidebarTOC.astro';
+import StressLab from '../components/StressLab.astro';
+import Abstract from '../sections/Abstract.astro';
+import Motivation from '../sections/Motivation.astro';
+import SocialForceModel from '../sections/SocialForceModel.astro';
+import SpeedArches from '../sections/SpeedArches.astro';
+import StressPropagates from '../sections/StressPropagates.astro';
+import EmotionToMotion from '../sections/EmotionToMotion.astro';
+import OptimalStress from '../sections/OptimalStress.astro';
+import References from '../sections/References.astro';
+---
+
+<Layout>
+  <TitleBlock />
+
+  <!-- Interactive simulator: hero hook -->
+  <StressLab />
+
+  <!-- Paper body with sidebar TOC -->
+  <div class="mx-auto max-w-[1380px] px-6">
+    <div class="xl:grid xl:grid-cols-[1fr_minmax(0,_var(--col-w))_var(--toc-w)] xl:gap-10" style="--col-w: 48rem; --toc-w: 16rem;">
+      <div></div>
+      <main class="min-w-0">
+        <Abstract />
+        <Motivation />
+        <SocialForceModel />
+        <SpeedArches />
+        <StressPropagates />
+        <EmotionToMotion />
+        <OptimalStress />
+        <References />
+      </main>
+      <div class="pt-12">
+        <SidebarTOC />
+      </div>
+    </div>
+  </div>
+
+  <footer
+    class="border-t border-[var(--color-rule)] py-8 text-center text-[0.85rem] text-[var(--color-muted)]"
+    style="font-family: var(--font-sans);"
+  >
+    © 2026 · Katrín Lilja Árnadóttir, Ernesto Corral, Filip Dimitrijević
+    · IE University · Mathematical Modeling
+  </footer>
+</Layout>

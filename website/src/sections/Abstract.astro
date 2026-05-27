@@ -1,0 +1,50 @@
+---
+import Section from '../components/Section.astro';
+import Math from '../components/Math.astro';
+---
+
+<Section id="abstract" title="Abstract">
+  <p>
+    We extend the Social Force Model of Helbing, Farkas and Vicsek (2000)
+    with a per-agent stress level <Math tex={String.raw`\beta_i(t) \in [0, 1]`} /> that
+    follows an SIR-style contagion ODE. Stress decays at rate
+    <Math tex={String.raw`\mu`} /> and spreads between neighbours through a
+    speed-dependent kernel of strength <Math tex={String.raw`\kappa`} /> and range
+    <Math tex={String.raw`\ell`} />. Stress in turn raises each agent's desired walking
+    speed through a linear link
+    <Math tex={String.raw`v_0(\beta) = V_{\min} + (V_{\max} - V_{\min})\beta`} />,
+    coupling psychological state to physical motion.
+  </p>
+
+  <p>
+    A mean-field reduction of the contagion ODE produces a logistic
+    equation governed by the reproduction number
+    <Math tex={String.raw`R_0 = 2\pi\rho\kappa\ell^{2}/\mu`} />. The system undergoes
+    a transcritical bifurcation at <Math tex={String.raw`R_0 = 1`} />: below the
+    threshold panic dies out, above it the crowd settles into an endemic
+    stress equilibrium <Math tex={String.raw`\beta^{*} = 1 - 1/R_0`} />. Agent-based
+    simulations confirm the mean-field curve and reveal a U-shaped
+    evacuation-time profile as a function of initial collective stress,
+    with an optimum at <Math tex={String.raw`\Sigma_0^{*} \approx 0.47`} />.
+  </p>
+
+  <p>
+    The two results combine into a closed-form critical crowd size
+    <Math tex={String.raw`N^{*} = \mu A / (2\pi\kappa\ell^{2})`} /> above which
+    sustained panic is unavoidable, and a monotonically decreasing
+    optimal stress <Math tex={String.raw`\Sigma_0^{*}(N)`} />. Three modelling
+    parameters map onto three measurable design levers: density
+    <Math tex={String.raw`\rho`} /> (exit width), contagion strength
+    <Math tex={String.raw`\kappa`} /> (authoritative information), and influence
+    range <Math tex={String.raw`\ell`} /> (visual separators).
+  </p>
+
+  <p
+    class="text-[0.92rem] mt-4"
+    style="color: var(--color-muted); font-family: var(--font-sans);"
+  >
+    <strong style="color: var(--color-ink-soft);">Keywords:</strong>
+    crowd dynamics, social force model, stress contagion, faster-is-slower,
+    transcritical bifurcation, evacuation, agent-based modelling.
+  </p>
+</Section>

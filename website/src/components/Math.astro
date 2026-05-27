@@ -1,0 +1,31 @@
+---
+import katex from 'katex';
+
+interface Props {
+  tex: string;
+  display?: boolean;
+}
+
+const { tex, display = false } = Astro.props;
+const html = katex.renderToString(tex, {
+  displayMode: display,
+  throwOnError: false,
+  strict: 'ignore',
+  output: 'html',
+});
+---
+
+{display ? (
+  <div class="katex-block" set:html={html} />
+) : (
+  <span class="katex-inline" set:html={html} />
+)}
+
+<style>
+  .katex-block {
+    margin: 1.2em 0;
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+</style>

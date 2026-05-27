@@ -1,0 +1,79 @@
+---
+import Section from '../components/Section.astro';
+
+const refs = [
+  {
+    authors: 'Helbing, D., Farkas, I., & Vicsek, T.',
+    year: '2000',
+    title: 'Simulating dynamical features of escape panic.',
+    venue: 'Nature, 407, 487–490.',
+  },
+  {
+    authors: 'Helbing, D., & Molnár, P.',
+    year: '1995',
+    title: 'Social force model for pedestrian dynamics.',
+    venue: 'Physical Review E, 51(5), 4282–4286.',
+  },
+  {
+    authors: 'Moussaïd, M., Helbing, D., & Theraulaz, G.',
+    year: '2011',
+    title: 'How simple rules determine pedestrian behavior and crowd disasters.',
+    venue: 'PNAS, 108(17), 6884–6888.',
+  },
+  {
+    authors: 'Fu, L., Song, W., Lv, W., & Lo, S. M.',
+    year: '2014',
+    title: 'Simulation of emotional contagion using modified SIR model.',
+    venue: 'Physica A: Statistical Mechanics and its Applications, 405, 380–391.',
+  },
+  {
+    authors: 'Hill, A. L., Rand, D. G., Nowak, M. A., & Christakis, N. A.',
+    year: '2010',
+    title: 'Emotions as infectious diseases in a large social network: the SISa model.',
+    venue: 'Proceedings of the Royal Society B, 277(1701), 3827–3835.',
+  },
+  {
+    authors: 'Iacopini, I., Petri, G., Barrat, A., & Latora, V.',
+    year: '2019',
+    title: 'Simplicial models of social contagion.',
+    venue: 'Nature Communications, 10, 2485.',
+  },
+  {
+    authors: 'Cantin, G., Verdière, N., Lanza, V., et al.',
+    year: '2016',
+    title: 'Mathematical modeling of human behaviors during catastrophic events.',
+    venue: 'International Journal of Bifurcation and Chaos, 26(10), 1630025.',
+  },
+  {
+    authors: 'Panagiotopoulos, I., Starke, J., et al.',
+    year: '2022',
+    title: 'Control of collective human behavior.',
+    venue: 'Physical Review Research, 4(4), 043190.',
+  },
+];
+---
+
+<Section id="references" title="References">
+  <ol
+    class="space-y-2 text-[0.95rem] leading-[1.6]"
+    style="counter-reset: ref; padding-left: 0; list-style: none;"
+  >
+    {refs.map((r, i) => (
+      <li
+        id={`ref-${i + 1}`}
+        class="pl-9 -indent-9"
+        style="color: var(--color-ink-soft);"
+      >
+        <span
+          class="inline-block w-7 text-[var(--color-muted)] tabular-nums"
+          style="font-family: var(--font-sans);"
+        >
+          [{i + 1}]
+        </span>
+        {r.authors} ({r.year}).
+        <em>{r.title}</em>
+        <span style="color: var(--color-muted);">{r.venue}</span>
+      </li>
+    ))}
+  </ol>
+</Section>

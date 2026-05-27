@@ -1,0 +1,86 @@
+---
+import Section from '../components/Section.astro';
+import Math from '../components/Math.astro';
+---
+
+<Section id="stress-propagates" number="4" title="How stress propagates">
+  <p>
+    Panic spreads like a rumour: one agent sprints, neighbours speed up,
+    and within seconds the whole crowd is running. We model each agent's
+    panic level <Math tex={String.raw`\beta_i(t) \in [0, 1]`} />:
+  </p>
+
+  <Math
+    display
+    tex={String.raw`\dot{\beta}_i \;=\; \underbrace{-\,\mu\,\beta_i}_{\text{natural decay}} \;+\; \underbrace{\kappa\!\sum_{j \neq i} e^{-d_{ij}/\ell}\,\varphi_j\,(1 - \beta_i)}_{\text{social contagion}}.`}
+  />
+
+  <p>
+    <strong>Parameters:</strong>
+    <Math tex={String.raw`\mu`} /> = recovery rate (how quickly you calm down on your
+    own); <Math tex={String.raw`\kappa`} /> = contagion strength (how readily you
+    catch panic from others); <Math tex={String.raw`\ell`} /> = influence range, so
+    that stress decays exponentially as
+    <Math tex={String.raw`e^{-d_{ij}/\ell}`} /> and a neighbour at
+    <Math tex={String.raw`0.5\,\text{m}`} /> matters far more than one
+    across the room; <Math tex={String.raw`(1 - \beta_i)`} /> prevents panic
+    exceeding 1; and
+    <Math tex={String.raw`\varphi_j = (1 + e^{-k(|\mathbf{v}_j| - v_\mathrm{mid})})^{-1}`} />
+    is a sigmoid translating each neighbour's speed into a readable panic
+    signal.
+  </p>
+
+  <h3
+    class="mt-8 mb-3 text-[1.15rem] font-semibold"
+    style="color: var(--color-ink);"
+  >
+    Mean-field reduction
+  </h3>
+
+  <p>
+    For a uniform crowd at density <Math tex={String.raw`\rho`} />, the neighbour sum
+    collapses to a single number
+    <Math tex={String.raw`\Gamma = 2\pi\rho\ell^{2}`} />, the
+    <em>effective neighbourhood size</em>, via a disk integral:
+  </p>
+
+  <Math
+    display
+    tex={String.raw`\sum_{j \neq i} e^{-d_{ij}/\ell}\,\varphi_j \;\approx\; \rho\,\beta \int_{0}^{\infty} e^{-r/\ell}\,2\pi r\,dr \;=\; 2\pi\rho\ell^{2}\,\beta \;\equiv\; \Gamma\,\beta.`}
+  />
+
+  <p>
+    This collapses the full model to a logistic ODE with one critical
+    threshold:
+  </p>
+
+  <Math
+    display
+    tex={String.raw`\boxed{\,R_0 \;=\; \frac{\kappa\,\Gamma}{\mu} \;=\; \frac{2\pi\rho\kappa\ell^{2}}{\mu}\,}`}
+  />
+
+  <p>
+    <Math tex={String.raw`R_0 > 1`} /> means each panicking agent re-stresses more
+    than one other before calming: panic sustains itself at
+    <Math tex={String.raw`\beta^{*} = 1 - 1/R_0`} />; below <Math tex={String.raw`R_0 = 1`} /> it
+    dies out. Because <Math tex={String.raw`\Gamma \propto \rho \propto N`} />,
+    larger or denser crowds are more susceptible. Managers lower
+    <Math tex={String.raw`R_0`} /> by widening exits
+    (<Math tex={String.raw`\downarrow \rho`} />), authoritative audio
+    (<Math tex={String.raw`\downarrow \kappa`} />), or calming signals
+    (<Math tex={String.raw`\uparrow \mu`} />). Simulations confirm the
+    mean-field curve (Figure&nbsp;2).
+  </p>
+
+  <figure>
+    <img src={`${import.meta.env.BASE_URL}/figures/fig2_phase_diagram.png`.replace(/\/+/g, '/')} alt="Endemic stress β* vs R₀ phase diagram" />
+    <figcaption>
+      <strong>Figure 2.</strong> Endemic stress <Math tex={String.raw`\beta^{*}`} />
+      vs. reproduction number <Math tex={String.raw`R_0`} />. Theory
+      (dashed, <Math tex={String.raw`\beta^{*} = 1 - 1/R_0`} />) and
+      spatial simulations (dots) match closely; the sharp bifurcation at
+      <Math tex={String.raw`R_0 = 1`} /> is a transcritical phase
+      transition.
+    </figcaption>
+  </figure>
+</Section>

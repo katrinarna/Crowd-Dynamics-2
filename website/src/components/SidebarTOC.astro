@@ -1,0 +1,92 @@
+---
+interface TocItem {
+  id: string;
+  label: string;
+}
+
+const items: TocItem[] = [
+  { id: 'interactive', label: 'Interactive simulator' },
+  { id: 'abstract', label: 'Abstract' },
+  { id: 'motivation', label: '1. Motivation' },
+  { id: 'sfm', label: '2. The Social Force Model' },
+  { id: 'speed-arches', label: '3. Speed, arches, and FIS' },
+  { id: 'stress-propagates', label: '4. How stress propagates' },
+  { id: 'emotion-motion', label: '5. How emotion becomes motion' },
+  { id: 'optimal-stress', label: '6. Optimal stress Σ₀*(N)' },
+  { id: 'references', label: 'References' },
+];
+---
+
+<aside
+  class="hidden xl:block"
+  style="font-family: var(--font-sans);"
+>
+  <nav
+    id="toc"
+    aria-label="Table of contents"
+    class="sticky top-8 w-60 px-5 py-5 rounded-md border border-[var(--color-rule)] bg-white"
+  >
+    <p
+      class="mb-3 text-[0.7rem] uppercase tracking-[0.18em] text-[var(--color-muted)]"
+    >
+      On this page
+    </p>
+    <ul class="space-y-1.5 text-[0.88rem]">
+      {items.map((it) => (
+        <li>
+          <a
+            href={`#${it.id}`}
+            data-toc-target={it.id}
+            class="block py-0.5 leading-snug text-[var(--color-ink-soft)] hover:text-[var(--color-link)] border-l-2 border-transparent pl-3 -ml-3 transition-colors"
+          >
+            {it.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</aside>
+
+<script>
+  // Highlight the current section in the sidebar TOC as the user scrolls.
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc-target]');
+  const idToLink = new Map<string, HTMLAnchorElement>();
+  links.forEach((l) => idToLink.set(l.dataset.tocTarget!, l));
+
+  const activeClasses = ['text-[var(--color-link)]', 'border-[var(--color-link)]', 'font-medium'];
+  const inactiveClasses = ['text-[var(--color-ink-soft)]'];
+
+  function setActive(id: string | null) {
+    links.forEach((l) => {
+      l.classList.remove(...activeClasses);
+      l.classList.add(...inactiveClasses);
+    });
+    if (id) {
+      const link = idToLink.get(id);
+      if (link) {
+        link.classList.add(...activeClasses);
+        link.classList.remove(...inactiveClasses);
+      }
+    }
+  }
+
+  const sections = Array.from(idToLink.keys())
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null);
+
+  if (sections.length > 0 && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry highest on the page that is currently visible
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible.length > 0) {
+          setActive(visible[0].target.id);
+        }
+      },
+      { rootMargin: '-20% 0px -65% 0px', threshold: 0 },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

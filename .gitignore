@@ -23,6 +23,9 @@ env/
 # Generated images (re-created by running the scripts)
 simulations/*.png
 *.png
+# Exception: website assets need to ship with the site for GitHub Pages
+!website/public/**/*.png
+!website/public/qr.png
 
 # Large course PDFs (not source notes)
 MathModeling*.pdf

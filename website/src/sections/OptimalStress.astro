@@ -1,0 +1,68 @@
+---
+import Section from '../components/Section.astro';
+import Math from '../components/Math.astro';
+---
+
+<Section id="optimal-stress" number="6" title={"Agents vs. optimal stress " + "Σ₀*(N)"}>
+  <figure>
+    <div
+      class="grid place-items-center text-center text-[var(--color-muted)]"
+      style="aspect-ratio: 5 / 3; background: var(--color-figure-bg); font-family: var(--font-sans); font-size: 0.9rem;"
+    >
+      Figure 4. Optimal stress Σ₀*(N) vs. crowd size <em>N</em><br />
+      (pending: figure from teammate)
+    </div>
+    <figcaption>
+      <strong>Figure 4.</strong> Optimal stress
+      <Math tex={String.raw`\Sigma_0^{*}(N)`} /> vs. crowd size
+      <Math tex={String.raw`N`} />. The optimum decreases monotonically with
+      <Math tex={String.raw`N`} />; the dashed line marks the critical crowd size
+      <Math tex={String.raw`N^{*} = \mu A / (2\pi\kappa\ell^{2})`} />,
+      beyond which sustained collective panic is guaranteed.
+    </figcaption>
+  </figure>
+
+  <p>
+    The optimal stress <em>decreases</em> monotonically with crowd size.
+    Larger <Math tex={String.raw`N`} /> raises mean density
+    <Math tex={String.raw`\rho \approx N/A`} />, which raises
+    <Math tex={String.raw`\Gamma = 2\pi\rho\ell^{2}`} />, which raises
+    <Math tex={String.raw`R_0`} />. The epidemic threshold is crossed when
+    <Math tex={String.raw`N > N^{*} = \mu A / (2\pi\kappa\ell^{2})`} />:
+    for <Math tex={String.raw`N > N^{*}`} />, sustained panic is guaranteed above a
+    threshold stress that decreases with <Math tex={String.raw`N`} />, shifting the
+    optimal <Math tex={String.raw`\Sigma_0^{*}`} /> leftward. Near the
+    bottleneck, local density can be three to four times the room
+    average, pushing <Math tex={String.raw`R_0`} /> above 1 even when the crowd
+    appears sparse globally.
+  </p>
+
+  <p>
+    This result has direct design implications. Crowd managers can raise
+    <Math tex={String.raw`N^{*}`} /> and widen the safe operating window by:
+  </p>
+
+  <ol>
+    <li>
+      reducing density <Math tex={String.raw`\rho`} /> via wider exits or staggered
+      entry, shifting <Math tex={String.raw`R_0`} /> below 1;
+    </li>
+    <li>
+      reducing contagion strength <Math tex={String.raw`\kappa`} /> via authoritative
+      audio instructions that give agents an alternative information
+      channel, reducing susceptibility to neighbour-driven panic;
+    </li>
+    <li>
+      reducing contagion length <Math tex={String.raw`\ell`} /> via physical
+      separators that block line of sight, shortening the range of social
+      influence.
+    </li>
+  </ol>
+
+  <p>
+    Each lever corresponds to a measurable architectural or procedural
+    intervention. The broader takeaway: the alarm intensity and crowd
+    density appropriate for a 20-person fire drill are dangerously
+    mismatched for a 500-person concert venue.
+  </p>
+</Section>
